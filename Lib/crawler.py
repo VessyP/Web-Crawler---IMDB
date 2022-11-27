@@ -19,6 +19,8 @@ class Crawler():
     #   """
     #   pass
 
+    # TEST
+
     def write_to_file(self, filename, content):
         """ Write string to given filename
             :param filename: string
