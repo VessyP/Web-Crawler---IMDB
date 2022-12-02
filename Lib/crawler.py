@@ -1,6 +1,8 @@
 import requests
 import os
 from Lib.constants import DATA_PATH
+import re
+from bs4 import BeautifulSoup
 
 BASE_URL = "https://www.imdb.com/chart/moviemeter/?ref_=nv_mv_mpm"
 
@@ -43,13 +45,15 @@ class Crawler():
 
             return r.text
 
+
+
     def run(self):
         """ run the crawler for each url in seed
           Use multithreading for each GET request
 
         """
         for url in self.seed:
-            print(f"URL is {url}")
+            # print(f"URL is {url}")
             html = self.get_html(url)
             self.write_to_file("imdb.html", html)
 
@@ -60,6 +64,3 @@ if __name__ == '__main__':
     ]
     crawler = Crawler(seed)
     crawler.run()
-
-
-
