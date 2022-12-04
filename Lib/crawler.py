@@ -3,14 +3,17 @@ import os
 from Lib.constants import DATA_PATH
 import re
 from bs4 import BeautifulSoup
-from scraper import links
+from Lib.scraper import links
+from Lib.db import DB
 
 BASE_URL = "https://www.imdb.com/chart/moviemeter/?ref_=nv_mv_mpm"
+
 
 
 class Crawler():
     def __init__(self, seed):
         self.seed = seed
+        self.db = DB()
 
     # def make_filename(self,url):
     #     pass
@@ -44,12 +47,16 @@ class Crawler():
         # print(f'r.encoding: {r.encoding}')
         if r.ok:
             # r.encoding = 'UTF-8'
-git in
+
             return r.text
 
+    def create_empty_table(self):
+        self.db.drop_imdb_table()
+        self.db.create_imdb_table()
 
     def get_page_data(self, html):
         film_info = {}
+
         # for link in links:
         #     html = link
         headers = {"user-agent": "Chrome/107.0.5304.123"}
@@ -70,13 +77,15 @@ git in
         for a in genre_a:
             genre = a.getText(strip=True)
             genre_list.append(genre)
+            genre_all = '; '.join(genre_list)
         # print(genre_list)
 
         film_info = {'title': title,
                      'director': director,
-                     'genre': genre_list}
+                     'genre': genre_all}
 
         print(film_info)
+        self.db.insert_row(film_info)
 
 
 
@@ -91,14 +100,16 @@ git in
             self.write_to_file("imdb.html", html)
 
 
-if __name__ == '__main__':
-    seed = [
-        "https://www.imdb.com/chart/moviemeter/?ref_=nv_mv_mpm"
-    ]
-    crawler = Crawler(seed)
-    crawler.run()
+# if __name__ == '__main__':
+seed = [
+    "https://www.imdb.com/chart/moviemeter/?ref_=nv_mv_mpm"
+]
+crawler = Crawler(seed)
+crawler.run()
+crawler.create_empty_table()
 
-    for link in links:
-        print(link)
-        crawler.get_page_data(link)
+for link in links:
+     # print(link)
+
+    crawler.get_page_data(link)
 

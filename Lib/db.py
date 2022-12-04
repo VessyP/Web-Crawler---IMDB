@@ -1,19 +1,22 @@
 import mysql
 import mysql.connector as mc
-from crawler import *
+from configparser import ConfigParser
+import Lib.read_config
 
-imdb = mysql.connector.connect(
-    host="127.0.0.1",
-    user="vesselina",
-    password="Vv123456*",
-    database="imdb"
-)
+
+# imdb = mysql.connector.connect(
+#     host="127.0.0.1",
+#     user="vesselina",
+#     password="Vv123456*",
+#     database="imdb"
+# )
 
 
 class DB():
     def __init__(self):
-        mysql_config = read_db_config('config.ini', 'mysql')
-        print(mysql_config)
+
+        mysql_config = Lib.read_config.read_db_config('config.ini', 'mysql')
+        # print(mysql_config)
         try:
             self.conn = mc.connect(**mysql_config)
 
@@ -62,7 +65,7 @@ class DB():
 		"""
 
         with self.conn.cursor(prepared=True) as cursor:
-            cursor.execute(sql, dict(film_info.values()))
+            cursor.execute(sql, tuple(row_data.values()))
             self.conn.commit()
 
     def select_all_data(self):
@@ -74,16 +77,6 @@ class DB():
 
         return result
 
-    def get_last_updated_date(self):
-        sql = 'SELECT MAX(updated_at) AS "Max Date" FROM imdb;'
-        with self.conn.cursor() as cursor:
-            cursor.execute(sql)
-            result = cursor.fetchone()
-
-        if result:
-            return result[0]
-        else:
-            raise ValueError('No data in table')
 
     def get_column_names(self):
         sql = "SELECT id, title, director, genre FROM imdb LIMIT 1;"
@@ -95,9 +88,12 @@ class DB():
         return cursor.column_names
 
 
+    # def delete_info_from_table(self):
+    #     with self.conn.cursor() as cursor:
+    #         delete from imdb
+
+
+
 if __name__ == '__main__':
     db = DB()
 
-    # db.get_column_names()
-    res = db.get_last_updated_date()
-    print(res)
