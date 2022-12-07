@@ -9,11 +9,11 @@ from Lib.db import DB
 BASE_URL = "https://www.imdb.com/chart/moviemeter/?ref_=nv_mv_mpm"
 
 
-
 class Crawler():
     def __init__(self, seed):
         self.seed = seed
         self.db = DB()
+        self.status = 0
 
     # def make_filename(self,url):
     #     pass
@@ -87,8 +87,6 @@ class Crawler():
         print(film_info)
         self.db.insert_row(film_info)
 
-
-
     def run(self):
         """ run the crawler for each url in seed
           Use multithreading for each GET request
@@ -99,6 +97,19 @@ class Crawler():
             html = self.get_html(url)
             self.write_to_file("imdb.html", html)
 
+        self.create_empty_table()
+
+
+
+
+
+    def update_status(self):
+        """Updating the status of the crawler
+        after it finishes its job."""
+
+        self.status = 1
+        print('Crawler finish its job!')
+
 
 # if __name__ == '__main__':
 seed = [
@@ -107,9 +118,8 @@ seed = [
 crawler = Crawler(seed)
 crawler.run()
 crawler.create_empty_table()
-
+#
 for link in links:
-     # print(link)
+    # print(link)
 
     crawler.get_page_data(link)
-

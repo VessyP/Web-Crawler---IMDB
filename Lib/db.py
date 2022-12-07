@@ -77,7 +77,6 @@ class DB():
 
         return result
 
-
     def get_column_names(self):
         sql = "SELECT id, title, director, genre FROM imdb LIMIT 1;"
 
@@ -87,13 +86,13 @@ class DB():
 
         return cursor.column_names
 
-
     # def delete_info_from_table(self):
     #     with self.conn.cursor() as cursor:
     #         delete from imdb
 
 
-
 if __name__ == '__main__':
     db = DB()
 
+    res = db.select_all_data()
+    print(res)
