@@ -65,16 +65,16 @@ class TableView(qtw.QTableView):
 
             items = []
             for field in row:
-                item = qtg.QStandardItem()
+                item = qtg.QStandardItem(str(field))
                 # if isinstance(field, datetime.date):
                 # 	field = field.strftime('%d.%m.%Y')
                 # elif isinstance(field, str) and len(field)>100:
                 # set full string with ToolTipRole:
-                item.setData(field, qtc.Qt.ToolTipRole)
+                # item.setData(field, qtc.Qt.ToolTipRole)
                 # trim string for display
-                field = field[0:50]+'...'
+                # field = field[0:50]+'...'
 
-                item.setData(field, qtc.Qt.DisplayRole)
+                # item.setData(field, qtc.Qt.DisplayRole)
                 items.append(item)
 
             model.insertRow(i, items)
@@ -93,7 +93,6 @@ class TableView(qtw.QTableView):
 class TableViewWidget(qtw.QWidget):
     def __init__(self, parent, *args, **kwargs):
         """
-
         :rtype: object
         """
         super().__init__(*args, **kwargs)
@@ -121,7 +120,7 @@ class TableViewWidget(qtw.QWidget):
         filterLabel = qtw.QLabel('Filter by column: ')
 
         filterLineEdit = qtw.QLineEdit()
-        filterLineEdit.textChanged.connect(lambda: self.tableView.filter_proxy_model.setFilterRegExp)
+        filterLineEdit.textChanged.connect(self.tableView.filter_proxy_model.setFilterRegExp)
 
         comboBox = qtw.QComboBox()
         comboBox.addItems(["{0}".format(col) for col in self.tableView.column_names])
@@ -170,4 +169,3 @@ class TableViewWidget(qtw.QWidget):
     #     # table_view.show()
     #     self.tableViewWidget = TableViewWidget(parent=self)
     #     self.tableViewWidget.show()
-

@@ -1,17 +1,17 @@
 import requests
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin
+from Lib.constants import BASE_URL
 
-BASE_URL = "https://www.imdb.com/"
-html = requests.get(urljoin(BASE_URL, "chart/moviemeter/?ref_=nv_mv_mpm"))
 
-links = list()
-ratings = list()
+# html = requests.get(urljoin(BASE_URL, "chart/moviemeter/?ref_=nv_mv_mpm"))
 
 def scrape_links(html):
+    links = list()
+    ratings = list()
 
 
-    soup = BeautifulSoup(html.content, 'html.parser')
+    soup = BeautifulSoup(html, 'html.parser')
     table = soup.find("table", class_="chart full-width").tbody
     rows = table.find_all('tr')
 
@@ -28,11 +28,9 @@ def scrape_links(html):
                 a = link_td.a
                 links.append(urljoin(BASE_URL, a['href']))
 
-    # print(ratings)       # Test
-    # print(links)
-    #
-    # print(len(ratings))  # Test
-    # print(len(links))
+    return links
 
 
-scrape_links(html)
+
+
+# scrape_links(html)

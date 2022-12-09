@@ -4,7 +4,6 @@
 # from Lib.db import DB
 # import sys
 
-BASE_URL = ["https://www.imdb.com/chart/moviemeter/?ref_=nv_mv_mpm"]
 
 import sys
 
@@ -15,10 +14,10 @@ from PyQt5 import QtGui as qtg
 from Lib.crawler import Crawler
 from Lib.PyQT import TableViewWidget
 from Lib.db import DB
-from Lib.crawler import seed
-from Lib.scraper import links
 
 from PyQt5.QtGui import QPixmap
+
+MAIN_PAGE_PATH = "/chart/moviemeter/?ref_=nv_mv_mpm"
 
 
 class MainWindow(qtw.QMainWindow):
@@ -26,9 +25,6 @@ class MainWindow(qtw.QMainWindow):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
-
-        self.crawler = Crawler(seed)
         self.setWindowTitle('IMDB Crawler')
         self.setWindowIcon(qtg.QIcon('Lib/imdb_logo.png'))
 
@@ -68,7 +64,8 @@ class MainWindow(qtw.QMainWindow):
                                        "}"
                                        )
         self.btnShowData.setFont(qtg.QFont("Arial", 14))
-        self.btnShowData.setEnabled(False)
+        self.btnShowData.setEnabled(True)
+        # self.btnShowData.hide()
 
         btnsLayout.addWidget(btnCrawlerRun)
         btnsLayout.addWidget(self.btnShowData)
@@ -83,7 +80,8 @@ class MainWindow(qtw.QMainWindow):
         mainLayout.addLayout(statusLayout)
 
         ### Actions on buttons click:
-        self.btnShowData.clicked.connect(lambda: self.show_data())
+        # self.btnShowData.clicked.connect(lambda: self.show_data())
+        self.btnShowData.clicked.connect(self.show_data)
         btnCrawlerRun.clicked.connect(self.run_crawler)
 
         # add spacer or just fixed spacing
@@ -113,14 +111,8 @@ class MainWindow(qtw.QMainWindow):
         qtw.QApplication.processEvents()  # needed to force processEvents
 
         # start crawler
+        self.crawler = Crawler(MAIN_PAGE_PATH)
         self.crawler.run()
-        self.crawler.create_empty_table()
-        for link in links:
-            print(link)
-
-            self.crawler.get_page_data(link)
-
-        self.crawler.update_status()
 
         # if crawler ready:
         if self.crawler.status:
@@ -131,8 +123,8 @@ class MainWindow(qtw.QMainWindow):
 
 
 if __name__ == "__main__":
-    crawler = Crawler(BASE_URL)
-    crawler.run()
+    # crawler = Crawler(BASE_URL)
+    # crawler.run()
 
     app = qtw.QApplication(sys.argv);
     window = MainWindow()

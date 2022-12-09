@@ -46,17 +46,6 @@ class DB():
             cursor.execute(sql)
             self.conn.commit()
 
-    def insert_rows(self, rows_data):
-        sql = """
-			INSERT IGNORE INTO title
-			(title, director, genre)
-			VALUES ( %s, %s, %s)
-		"""
-
-        with self.conn.cursor() as cursor:
-            cursor.executemany(sql, rows_data)
-            self.conn.commit()
-
     def insert_row(self, row_data):
         sql = """
 			INSERT IGNORE INTO imdb
