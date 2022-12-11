@@ -1,27 +1,13 @@
-import mysql
 import mysql.connector as mc
-from configparser import ConfigParser
 import Lib.read_config
-
-
-# imdb = mysql.connector.connect(
-#     host="127.0.0.1",
-#     user="vesselina",
-#     password="Vv123456*",
-#     database="imdb"
-# )
 
 
 class DB():
     def __init__(self):
 
         mysql_config = Lib.read_config.read_db_config('config.ini', 'mysql')
-        # print(mysql_config)
         try:
             self.conn = mc.connect(**mysql_config)
-
-        # self.drop_imdb_table()
-        # self.create_imdb_table()
         except mc.Error as e:
             print(e)
 
@@ -75,13 +61,8 @@ class DB():
 
         return cursor.column_names
 
-    # def delete_info_from_table(self):
-    #     with self.conn.cursor() as cursor:
-    #         delete from imdb
-
 
 if __name__ == '__main__':
     db = DB()
-
     res = db.select_all_data()
     print(res)

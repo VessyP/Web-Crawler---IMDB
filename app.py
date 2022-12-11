@@ -1,46 +1,36 @@
-# # import requests
-# from Lib.crawler import Crawler
-# # import os
-# from Lib.db import DB
-# import sys
-
-
 import sys
 
 from PyQt5 import QtWidgets as qtw
 from PyQt5 import QtCore as qtc
 from PyQt5 import QtGui as qtg
+from PyQt5.QtGui import QPixmap
 
 from Lib.crawler import Crawler
 from Lib.PyQT import TableViewWidget
-from Lib.db import DB
-
-from PyQt5.QtGui import QPixmap
 
 MAIN_PAGE_PATH = "/chart/moviemeter/?ref_=nv_mv_mpm"
 
 
 class MainWindow(qtw.QMainWindow):
-
+    """"Creating the GUI."""
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.setWindowTitle('IMDB Crawler')
-        self.setWindowIcon(qtg.QIcon('Lib/imdb_logo.png'))
+        self.setWindowIcon(qtg.QIcon('Lib/Images/imdb_logo.png'))
 
-
-        ### Main layout
+        # Main layout
         mainLayout = qtw.QVBoxLayout()
 
-        ### Table Caption part:
-        lblTableCaption = qtw.QLabel('IMDB Data')  # ????????????????
-        pixmap = QPixmap('Lib/imdb_pic.jpg')
+        # Table Caption part:
+        lblTableCaption = qtw.QLabel('IMDB Data')
+        pixmap = QPixmap('Lib/Images/imdb_pic.jpg')
         lblTableCaption.setPixmap(pixmap)
         lblTableCaption.setObjectName('lblTableCaption')
         lblTableCaption.setAlignment(qtc.Qt.AlignCenter)
         mainLayout.addWidget(lblTableCaption)
 
-        ### Buttons
+        # Buttons
         btnsLayout = qtw.QHBoxLayout()
         btnCrawlerRun = qtw.QPushButton('Run Crawler')
         btnCrawlerRun.setStyleSheet("QPushButton"
@@ -64,29 +54,27 @@ class MainWindow(qtw.QMainWindow):
                                        "}"
                                        )
         self.btnShowData.setFont(qtg.QFont("Arial", 14))
-        self.btnShowData.setEnabled(True)
+        self.btnShowData.setEnabled(False)
         # self.btnShowData.hide()
 
         btnsLayout.addWidget(btnCrawlerRun)
         btnsLayout.addWidget(self.btnShowData)
         mainLayout.addLayout(btnsLayout)
 
-        ### Status
-        ## will be hiddin on start
+        # Status will be hiddin on start
         statusLayout = qtw.QVBoxLayout()
         self.lblStatus = qtw.QLabel('Crawler Working...')
         self.lblStatus.hide()
         statusLayout.addWidget(self.lblStatus)
         mainLayout.addLayout(statusLayout)
 
-        ### Actions on buttons click:
+        # Actions on buttons click:
         # self.btnShowData.clicked.connect(lambda: self.show_data())
         self.btnShowData.clicked.connect(self.show_data)
         btnCrawlerRun.clicked.connect(self.run_crawler)
 
         # add spacer or just fixed spacing
         mainLayout.addSpacing(10)
-        # mainLayout.addSpacerItem(qtw.QSpacerItem(0, 0, qtw.QSizePolicy.Expanding, qtw.QSizePolicy.Expanding))
 
         mainWidget = qtw.QWidget()
         mainWidget.setLayout(mainLayout)
@@ -96,7 +84,6 @@ class MainWindow(qtw.QMainWindow):
         self.show();
 
     def show_data(self):
-        print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
         self.tableViewWidget = TableViewWidget(parent=self)
         self.tableViewWidget.show()
 

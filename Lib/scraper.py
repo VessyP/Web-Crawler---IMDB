@@ -1,16 +1,14 @@
-import requests
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin
 from Lib.constants import BASE_URL
 
-
-# html = requests.get(urljoin(BASE_URL, "chart/moviemeter/?ref_=nv_mv_mpm"))
-
 def scrape_links(html):
+    """Scrape the html, find all
+    films with rating >= 8 and
+    gather the links in a list."""
+
     links = list()
     ratings = list()
-
-
     soup = BeautifulSoup(html, 'html.parser')
     table = soup.find("table", class_="chart full-width").tbody
     rows = table.find_all('tr')
@@ -31,6 +29,3 @@ def scrape_links(html):
     return links
 
 
-
-
-# scrape_links(html)
