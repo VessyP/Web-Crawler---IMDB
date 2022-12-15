@@ -25,7 +25,7 @@ class Crawler():
           First try with SSL verification (default),
           if error => print a message."""
 
-        print(f'get_html: {url}')
+        # print(f'get_html: {url}')
         headers = {"user-agent": "Chrome/107.0.5304.123"}
         r = requests.get(url, headers=headers)
         # print(f'r.encoding: {r.encoding}')

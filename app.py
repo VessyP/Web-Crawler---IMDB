@@ -110,8 +110,6 @@ class MainWindow(qtw.QMainWindow):
 
 
 if __name__ == "__main__":
-    # crawler = Crawler(BASE_URL)
-    # crawler.run()
 
     app = qtw.QApplication(sys.argv);
     window = MainWindow()
